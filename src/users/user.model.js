@@ -1,11 +1,19 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-    nombre: {
+    name: {
         type: String,
         required: [true, "El Nombre Es Obligatorio"]
     },
-    correo:{
+    surname: {
+        type: String,
+        required: [true, "El Nombre Es Obligatorio"]
+    },
+    username: {
+        type: String,
+        required: [true, "El Nombre Es Obligatorio"]
+    },
+    email:{
         type: String,
         required: [true, "El Correo Es Obligatorio"],
         unique: true
@@ -13,6 +21,9 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "La Contraseña Es Obligatoria"]
+    },
+    profile_picture:{
+        type: String,
     },
     img:{
         type: String,
