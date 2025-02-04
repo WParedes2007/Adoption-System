@@ -3,14 +3,14 @@ import Usuario from '../users/user.model.js';
 import { generarJWT } from '../helpers/generate-jwt.js';
 
 export const login = async (req, res) => {
+    
     const {email,password, username} = req.body;
+
     try {
 
-        const lowerEmail = email ? email.toLowerCase() : null;
-        const lowerUserName = username ? username.toLowerCase() : null;
 
         const user = await Usuario.findOne({
-            $or: [{email: lowerEmail},{username: lowerUserName}]
+            $or: [{email},{username}]
         })
 
         if(!user){

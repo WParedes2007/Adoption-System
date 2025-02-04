@@ -16,3 +16,11 @@ export const existenteEmail = async (correo = '') => {
         throw new Error(`El Correo ${correo} Ya Existe En La Data Base`);
     }
 }
+
+export const existeUsuarioById = async (id = "") => {
+    const existeUsuario = await Usuario.findById(id);
+    console.log("Id")
+    if(!existeUsuario){
+        throw new Error(`El Id ${id} no existe`);
+    }
+}
