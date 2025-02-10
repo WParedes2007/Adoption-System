@@ -80,6 +80,51 @@ export const updateUser = async(req, res = response) => {
     }
 }
 
+export const updatePassword = async (req, res) => {
+    try {
+        const {id} = req.params; 
+        const {password} = req.body;
+
+        if(!password){
+            return res.status(400).json({
+                success: false, 
+                msg: "La Contraseña No Coincide"
+            })
+        }
+
+        const hashOptions = {
+            timeCost: 3,
+            memoryCost: 2 ** 16,
+            parallelism: 1 
+        };
+
+        const encryptedPassword = await argon2.hash(password, hashOptions);
+
+        const user = await User.findByIdAndUpdate(id, {password: encryptedPassword}, {new: true});
+
+        if(!user){
+            res.status(400).json({
+                success: false,
+                msg: "Usario No Encontrado"
+            })
+        }
+
+
+        res.status(200).json({
+            success: true,
+            msg: "Contraseña Actualizada Correctamente",
+            user
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            succes:false,
+            msg:'Error al Actualizar La Contraseña',
+            error  
+            })
+    }
+}
+
 export const deleteUser = async (req, res)=>{
     try {
         const { id } = req.params
