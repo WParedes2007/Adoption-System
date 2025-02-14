@@ -1,46 +1,48 @@
-import User from "../users/user.model.js";
-import Pet from "../pet/pet.model.js";
-import Date from "../date/date.model.js";
+import Date from "../date/date.model.js"; // Asegúrate de que la ruta es correcta
+import Pet from "../pet/pet.model.js"; // Asegúrate de que la ruta es correcta
+import User from "../users/user.model.js"; // Asegúrate de que esta línea esté presente
 
-
-export const saveDate = async (req, res) =>{
+export const createDate = async (req, res) => {
     try {
-        const data = req.body;
-        const user = await User.findOne({email: data.email});
-        const pet = await Pet.findOne({name: data.name}); 
+        const { email, petId, date } = req.body;
 
-        if(!user){
+        console.log("Cuerpo de la solicitud para la cita:", req.body); // Agregar log aquí
+
+        const user = await User.findOne({ email });
+        if (!user) {
             return res.status(400).json({
                 success: false,
                 message: "Propietario No Encontrado"
-            })
+            });
         }
 
-        if(!pet){
+        const pet = await Pet.findById(petId);
+        if (!pet) {
             return res.status(400).json({
                 success: false,
                 message: "Mascota No Encontrada"
-            })
+            });
         }
 
-        const date = new Date({
-            ...data,
-            keeperUser: user._id,
-            keeperPet: pet._id
+        const newDate = new Date({
+            owner: user._id,
+            pet: pet._id,
+            date: date,
+            status: true
         });
 
-        await date.save();
+        await newDate.save();
 
         res.status(200).json({
             success: true,
-            date
-        })
-
+            date: newDate
+        });
     } catch (error) {
+        console.error("Error al guardar la cita:", error);
         res.status(500).json({
             success: false,
             message: "Error al guardar la cita",
             error
-        })
+        });
     }
 }

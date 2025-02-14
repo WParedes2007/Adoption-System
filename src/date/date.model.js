@@ -1,27 +1,25 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const DateSchema = Schema({
-    fecha:{
-        type: String,
+const DateSchema = new mongoose.Schema({
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true
     },
-    keeperUser:{
-        type: Schema.Types.ObjectId,
-        ref: "user",
+    pet: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Pet",
         required: true
     },
-    keeperPet:{
-        type: Schema.Types.ObjectId,
-        ref: "pet",
+    date: {
+        type: Date,
         required: true
     },
-    status:{
+    status: {
         type: Boolean,
         default: true
     }
-},{
-    timestamps: true,
-    versionKey: false
 });
 
-export default model("Date", DateSchema);
+export default mongoose.model("Date", DateSchema);
+

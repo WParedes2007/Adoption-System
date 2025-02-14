@@ -2,6 +2,7 @@ import { response, request } from "express";
 import { hash } from "argon2";
 import User from "./user.model.js";
 
+
 export const getUsers = async(req = request, res = response) => {
     try {
         const{limite = 10, desde = 0} = req.query;
@@ -82,48 +83,45 @@ export const updateUser = async(req, res = response) => {
 
 export const updatePassword = async (req, res) => {
     try {
-        const {id} = req.params; 
-        const {password} = req.body;
+        const { id } = req.params; 
+        const { password } = req.body;
 
-        if(!password){
+        if (!password) {
             return res.status(400).json({
                 success: false, 
                 msg: "La Contraseña No Coincide"
-            })
+            });
         }
 
-        const hashOptions = {
-            timeCost: 3,
-            memoryCost: 2 ** 16,
-            parallelism: 1 
-        };
+        // Crea la contraseña encriptada
+        const encryptedPassword = await hash(password);
 
-        const encryptedPassword = await argon2.hash(password, hashOptions);
+        // Actualiza el usuario en la base de datos
+        const user = await User.findByIdAndUpdate(id, { password: encryptedPassword }, { new: true });
 
-        const user = await User.findByIdAndUpdate(id, {password: encryptedPassword}, {new: true});
-
-        if(!user){
-            res.status(400).json({
+        if (!user) {
+            return res.status(400).json({
                 success: false,
-                msg: "Usario No Encontrado"
-            })
+                msg: "Usuario No Encontrado"
+            });
         }
-
 
         res.status(200).json({
             success: true,
             msg: "Contraseña Actualizada Correctamente",
             user
-        })
+        });
 
     } catch (error) {
+        console.error(error); // Para depuración
         res.status(500).json({
-            succes:false,
-            msg:'Error al Actualizar La Contraseña',
+            success: false,
+            msg: 'Error al Actualizar La Contraseña',
             error  
-            })
+        });
     }
 }
+
 
 export const deleteUser = async (req, res)=>{
     try {

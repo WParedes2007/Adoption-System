@@ -31,6 +31,7 @@ router.get(
 router.put(
     "/:id",
     [
+        validarJWT,
         validarCampos
     ],
     updatePet

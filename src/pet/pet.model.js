@@ -1,35 +1,37 @@
 import { Schema, model } from "mongoose";
 
-const PetSchema = Schema({
-    name:{
+const PetSchema = new Schema({
+    name: {
         type: String,
-        required: true
+        required: true, 
     },
-    description:{
+    description: {
         type: String,
-        required: true
+        required: true, 
     },
-    age:{
+    age: {
         type: Number,
-        required: true
+        required: true,
+        min: 0          
     },
-    type:{
+    type: {
         type: String,
-        uppercase: true,
-        required: true
+        required: true, 
+        uppercase: true,  
+        enum: ['PERRO', 'GATO', 'OTRO'],  
     },
-    keeper:{
+    keeper: {
         type: Schema.Types.ObjectId,
-        ref: "user",
-        required: true
+        ref: "User",     
+        required: true,  
     },
-    status:{
+    status: {
         type: Boolean,
-        default: true
+        default: true, 
     }
-},{
-    timestamps: true,
-    versionKey: false
+}, {
+    timestamps: true,  
+    versionKey: false   
 });
 
 export default model("Pet", PetSchema);

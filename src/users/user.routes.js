@@ -36,6 +36,7 @@ router.put(
 router.put(
     "/update-password/:id",
     [
+        validarJWT,
         check("id", "No es un ID Valido").isMongoId(),
         check("id").custom(existeUsuarioById),
         validarCampos

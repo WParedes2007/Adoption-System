@@ -35,4 +35,23 @@
   "updatedAt": {
     "$date": "2025-02-05T22:17:16.637Z"
   }
+},
+{
+  "_id": {
+    "$oid": "67af045259156cb58387638e"
+  },
+  "name": "Estrella",
+  "description": "French Puddle",
+  "age": 3,
+  "type": "PERRO",
+  "keeper": {
+    "$oid": "67a3c6aa53724906c9705985"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2025-02-14T08:52:34.113Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-14T09:00:13.926Z"
+  }
 }]
